@@ -1,0 +1,6 @@
+@P01DAW_2023_MM_658_2022_RL_652_Reservas_HostAddress = http://localhost:5005
+
+GET {{P01DAW_2023_MM_658_2022_RL_652_Reservas_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
