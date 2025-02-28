@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
-using P01DAW_2023_MM_658_2022_RL_652_Reservas.Models;
-namespace WebApiPractica.Models
+namespace P01DAW_2023_MM_658_2022_RL_652_Reservas.Models
 {
     public class ReservasContext : DbContext
     {
@@ -9,9 +8,9 @@ namespace WebApiPractica.Models
         {
 
         }
-        public DbSet<Usuario> usuarios { get; set; }
-        public DbSet<Sucursal> sucursales { get; set; }
-        public DbSet<Reserva> reservas { get; set; }
-        public DbSet<EspacioParqueo> espacioParqueos { get; set; }
+        public DbSet<Usuarios> usuarios { get; set; }
+        public DbSet<Sucursales> sucursales { get; set; }
+        public DbSet<Reservas> reservas { get; set; }
+        public DbSet<EspacioParqueos> espacioParqueos { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 namespace P01DAW_2023_MM_658_2022_RL_652_Reservas.Models
 {
-    public class Usuario
+    public class Usuarios
     {
         [Key]
         public int Id { get; set; }
@@ -12,7 +12,7 @@ namespace P01DAW_2023_MM_658_2022_RL_652_Reservas.Models
         public string Rol { get; set; }
     }
 
-    public class Sucursal
+    public class Sucursales
     {
         [Key]
         public int Id { get; set; }
@@ -24,7 +24,7 @@ namespace P01DAW_2023_MM_658_2022_RL_652_Reservas.Models
 
     }
 
-    public class EspacioParqueo
+    public class EspacioParqueos
     {
         [Key]
         public int Id { get; set; }
@@ -35,7 +35,7 @@ namespace P01DAW_2023_MM_658_2022_RL_652_Reservas.Models
         public string Estado { get; set; }
     }
 
-    public class Reserva
+    public class Reservas
     {
         [Key]
         public int Id { get; set; }
