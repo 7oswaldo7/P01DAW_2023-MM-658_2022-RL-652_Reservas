@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using P01DAW_2023_MM_658_2022_RL_652_Reservas.Models;
 
@@ -71,8 +70,9 @@ namespace P01DAW_2023_MM_658_2022_RL_652_Reservas.Controllers
             existingEspacio.CostoPorHora = espacioParqueo.CostoPorHora;
             existingEspacio.Estado = espacioParqueo.Estado;
 
+            _context.Entry(existingEspacio).State = EntityState.Modified;
             _context.SaveChanges();
-            return NoContent();
+            return Ok(existingEspacio);
         }
 
        
@@ -84,10 +84,10 @@ namespace P01DAW_2023_MM_658_2022_RL_652_Reservas.Controllers
             {
                 return NotFound();
             }
-
+            _context.espacioParqueos.Attach(espacioParqueo);
             _context.espacioParqueos.Remove(espacioParqueo);
             _context.SaveChanges();
-            return NoContent();
+            return Ok(espacioParqueo);
         }
 
         
