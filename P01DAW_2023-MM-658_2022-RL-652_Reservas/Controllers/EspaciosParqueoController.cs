@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using P01DAW_2023_MM_658_2022_RL_652_Reservas.Models;
@@ -10,80 +12,67 @@ namespace P01DAW_2023_MM_658_2022_RL_652_Reservas.Controllers
     public class EspaciosParqueoController : ControllerBase
     {
 
-        private readonly  ReservasContext _context;
+        private readonly ReservasContext _context;
 
         public EspaciosParqueoController(ReservasContext context)
         {
             _context = context;
         }
-        [HttpGet]
+        [HttpGet("GetAll")]
 
-        public async Task<ActionResult<IEnumerable<EspacioParqueos>>> GetEspacioParqueo()
-        {
-            return await _context.espacioParqueos.ToListAsync();
 
-        }
 
-        [HttpGet("id")]
-        public async Task<ActionResult<EspacioParqueos>> GetEspacioParqueo(int id) 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
         {
             var espacio = await _context.espacioParqueos.FindAsync(id);
-
-            if (espacio == null) 
+            if (espacio == null)
             {
                 return NotFound();
-            
             }
-
-            return espacio;
-        
+            return Ok(espacio);
         }
 
         [HttpPost]
-        public async Task<ActionResult<EspacioParqueos>> CreateEspacioParqueo(EspacioParqueos espacioParqueo)
+        public async Task<IActionResult> Create([FromBody] EspacioParqueos espacioParqueo)
         {
+            if (espacioParqueo == null)
+            {
+                return BadRequest();
+            }
+
             _context.espacioParqueos.Add(espacioParqueo);
             await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetEspacioParqueo), new { id = espacioParqueo.Id }, espacioParqueo);
+            return CreatedAtAction(nameof(GetById), new { id = espacioParqueo.Id }, espacioParqueo);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateEspacioParqueo(int id, EspacioParqueos espacioParqueo)
+        public async Task<IActionResult> Update(int id, [FromBody] EspacioParqueos espacioParqueo)
         {
             if (id != espacioParqueo.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(espacioParqueo).State = EntityState.Modified;
-
-            try
+            var existingEspacio = await _context.espacioParqueos.FindAsync(id);
+            if (existingEspacio == null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.espacioParqueos.Any(e => e.Id == id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
+            existingEspacio.Numero = espacioParqueo.Numero;
+            existingEspacio.Ubicacion = espacioParqueo.Ubicacion;
+            existingEspacio.CostoPorHora = espacioParqueo.CostoPorHora;
+            existingEspacio.Estado = espacioParqueo.Estado;
+
+            await _context.SaveChangesAsync();
             return NoContent();
-
         }
 
-
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEspacioParqueo(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var espacioParqueo = await _context.espacioParqueos
-                .FindAsync(id);
+            var espacioParqueo = await _context.espacioParqueos.FindAsync(id);
             if (espacioParqueo == null)
             {
                 return NotFound();
@@ -91,10 +80,28 @@ namespace P01DAW_2023_MM_658_2022_RL_652_Reservas.Controllers
 
             _context.espacioParqueos.Remove(espacioParqueo);
             await _context.SaveChangesAsync();
-
             return NoContent();
         }
 
-    }
+        [HttpGet("buscar")]
+        public async Task<IActionResult> Search([FromQuery] string estado)
+        {
+            if (string.IsNullOrWhiteSpace(estado))
+            {
+                return BadRequest();
+            }
 
+            var espacios = await _context.espacioParqueos
+                                         .Where(e => e.Estado.Contains(estado))
+                                         .ToListAsync();
+
+            if (!espacios.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(espacios);
+        }
+    }
+    
 }
