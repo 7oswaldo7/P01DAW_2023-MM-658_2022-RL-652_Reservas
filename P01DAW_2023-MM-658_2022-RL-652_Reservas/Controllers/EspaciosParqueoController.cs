@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WebApiPractica.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using P01DAW_2023_MM_658_2022_RL_652_Reservas.Models;
 
@@ -20,14 +18,14 @@ namespace P01DAW_2023_MM_658_2022_RL_652_Reservas.Controllers
         }
         [HttpGet]
 
-        public async Task<ActionResult<IEnumerable<EspacioParqueo>>> GetEspacioParqueo()
+        public async Task<ActionResult<IEnumerable<EspacioParqueos>>> GetEspacioParqueo()
         {
             return await _context.espacioParqueos.ToListAsync();
 
         }
 
         [HttpGet("id")]
-        public async Task<ActionResult<EspacioParqueo>> GetEspacioParqueo(int id) 
+        public async Task<ActionResult<EspacioParqueos>> GetEspacioParqueo(int id) 
         {
             var espacio = await _context.espacioParqueos.FindAsync(id);
 
@@ -42,7 +40,7 @@ namespace P01DAW_2023_MM_658_2022_RL_652_Reservas.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<EspacioParqueo>> CreateEspacioParqueo(EspacioParqueo espacioParqueo)
+        public async Task<ActionResult<EspacioParqueos>> CreateEspacioParqueo(EspacioParqueos espacioParqueo)
         {
             _context.espacioParqueos.Add(espacioParqueo);
             await _context.SaveChangesAsync();
@@ -51,7 +49,7 @@ namespace P01DAW_2023_MM_658_2022_RL_652_Reservas.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateEspacioParqueo(int id, EspacioParqueo espacioParqueo)
+        public async Task<IActionResult> UpdateEspacioParqueo(int id, EspacioParqueos espacioParqueo)
         {
             if (id != espacioParqueo.Id)
             {
