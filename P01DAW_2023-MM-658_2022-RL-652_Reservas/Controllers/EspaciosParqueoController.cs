@@ -19,13 +19,16 @@ namespace P01DAW_2023_MM_658_2022_RL_652_Reservas.Controllers
             _context = context;
         }
         [HttpGet("GetAll")]
-
-
+        public IActionResult GetAll()
+        {
+            var espacios = _context.espacioParqueos.ToList();
+            return Ok(espacios);
+        }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public IActionResult GetById(int id)
         {
-            var espacio = await _context.espacioParqueos.FindAsync(id);
+            var espacio = _context.espacioParqueos.Find(id);
             if (espacio == null)
             {
                 return NotFound();
@@ -33,8 +36,9 @@ namespace P01DAW_2023_MM_658_2022_RL_652_Reservas.Controllers
             return Ok(espacio);
         }
 
+        
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] EspacioParqueos espacioParqueo)
+        public IActionResult Create([FromBody] EspacioParqueos espacioParqueo)
         {
             if (espacioParqueo == null)
             {
@@ -42,19 +46,21 @@ namespace P01DAW_2023_MM_658_2022_RL_652_Reservas.Controllers
             }
 
             _context.espacioParqueos.Add(espacioParqueo);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return CreatedAtAction(nameof(GetById), new { id = espacioParqueo.Id }, espacioParqueo);
         }
 
+      
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] EspacioParqueos espacioParqueo)
+        public IActionResult Update(int id, [FromBody] EspacioParqueos espacioParqueo)
         {
             if (id != espacioParqueo.Id)
             {
                 return BadRequest();
             }
 
-            var existingEspacio = await _context.espacioParqueos.FindAsync(id);
+            var existingEspacio = _context.espacioParqueos
+                .Find(id);
             if (existingEspacio == null)
             {
                 return NotFound();
@@ -65,37 +71,39 @@ namespace P01DAW_2023_MM_658_2022_RL_652_Reservas.Controllers
             existingEspacio.CostoPorHora = espacioParqueo.CostoPorHora;
             existingEspacio.Estado = espacioParqueo.Estado;
 
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return NoContent();
         }
 
+       
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public IActionResult Delete(int id)
         {
-            var espacioParqueo = await _context.espacioParqueos.FindAsync(id);
+            var espacioParqueo = _context.espacioParqueos.Find(id);
             if (espacioParqueo == null)
             {
                 return NotFound();
             }
 
             _context.espacioParqueos.Remove(espacioParqueo);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return NoContent();
         }
 
+        
         [HttpGet("buscar")]
-        public async Task<IActionResult> Search([FromQuery] string estado)
+        public IActionResult Search([FromQuery] string estado)
         {
             if (string.IsNullOrWhiteSpace(estado))
             {
                 return BadRequest();
             }
 
-            var espacios = await _context.espacioParqueos
-                                         .Where(e => e.Estado.Contains(estado))
-                                         .ToListAsync();
+            var espacios = _context.espacioParqueos
+                                   .Where(e => e.Estado.Contains(estado))
+                                   .ToList();
 
-            if (!espacios.Any())
+            if (espacios.Count == 0)
             {
                 return NotFound();
             }
