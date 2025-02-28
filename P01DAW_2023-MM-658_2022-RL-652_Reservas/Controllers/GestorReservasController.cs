@@ -18,7 +18,7 @@ namespace P01DAW_2023_MM_658_2022_RL_652_Reservas.Controllers
         [Route("GetReservasActivas")]
         public IActionResult GetAll(int id)
         {
-            var listadoReservas = (from e in _reservasContexto.reservas where e.UsuarioId == id select e);
+            var listadoReservas = (from e in _reservasContexto.reservas where e.UsuarioId == id && e.Estado == "Activo" select e);
 
             if (listadoReservas.Count() == 0)
                 return NotFound();
