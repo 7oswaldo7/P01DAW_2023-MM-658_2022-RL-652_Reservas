@@ -50,3 +50,17 @@ VALUES
 ('Juan Perez', 'juan.perez@example.com', '1234567890', 'contrasenaSegura123', 'Cliente'),
 ('Maria Gomez', 'maria.gomez@example.com', '0987654321', 'contrasenaSegura456', 'Empleado')
 GO
+
+USE [PARQUEOSDB]
+GO
+
+INSERT INTO [dbo].[Sucursales]
+           ([Nombre]
+           ,[Direccion]
+           ,[Telefono]
+           ,[AdministradorId]
+           ,[EspaciosTotales])
+     VALUES
+           ('Sucursal A', 'Avenida Principal #123, Ciudad A', '123-456-7890', 1, 50),
+           ('Sucursal B', 'Calle Secundaria #456, Ciudad B', '098-765-4321', 2, 75)
+GO
